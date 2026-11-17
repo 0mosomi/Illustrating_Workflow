@@ -14,6 +14,8 @@ library(viridis)
 # + scale_color/fill_viridis(discrete = T/F)
 theme_set(theme_light())
 
+# Adding a comment
+
 #Script adapted from Sally Adamowicz, with consultation of below sources; last updated October 6, 2021. V1 poses challenge in Part 6. See V2 for example answer.
 
 ##SOURCES: During the preparation of this tutorial, I consulted the randomForest R package documentation as well as looked at the following tutorial by Saulo Pires de Oliveira, who uses the built-in iris dataset to show a simple example of using the randomForest package. I suggest you may also find it helpful to go through that tutorial.
