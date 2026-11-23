@@ -282,7 +282,7 @@ df_t9_te <- df_t9_te |>
 
 # Combining datasets
 
-df_all_tes <- bind_rows(df_sp_te, df_t9_te)
+df_all_tes <- bind_rows(df_sp_te, df_t9_te) 
 
 
 # Checking TE annotation counts
@@ -341,3 +341,19 @@ te_composition |>
   tail(5) |>
   summarise(top_five_percentage = sum(percentage))
 # Gives us the combined percentage of top five, %91.7
+
+
+### GEadditions
+## Visualizing TE family distribution across datasets
+
+te_composition |> 
+  ggplot(aes(x = reorder(matching_class, proportion), 
+         y = proportion,
+         fill = dataset)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  labs(title = "TE FAmily Composition Across Datasets",
+       x = "TE Family/Class",
+       y = "Proportion of TE Annotations",
+       fill = "Dataset") +
+  theme_minimal()
