@@ -1,11 +1,17 @@
 ##***************************
-## Assignment 1
+## Collaboration - Editing and Improving Code
 ##
-## Group07_Merged_Final_File
-##
+## Original authors: 
+## Behnam Abbaszadeh Aghdam, Taya Cosby, Livpreet Kaur, Mikayla Kent
+## Modified by: Enike Grace
+## Assignmnet 2 - Software Tools(6210)
+## Assignment 2 Teammate: Behnam Abbaszadeh Aghdam
 ## 2026-11-06
 ##
-##***************************
+## Modifications: 
+## 1. Pattern-based filtering of retrotransposon classes using regular expressions.
+## 2. Introduced a reusable function for TE classification to reduce code duplication and improve consistency.
+## 3. Improved the visualization of TE composition using a grouped horizontal bar chart, making comparisons of TE family abundance across datasets easier to interpret.
 
 ## _ Packages used -------
 library(tidyverse)
@@ -93,7 +99,7 @@ te_s9$matching_class |> unique()
 retro_sp <- c("PLE/Naiad", "PLE", "LINE/CR1", "LTR/Pao", "LTR/Gypsy", "LINE/RTE-BovB",
               "SINE/tRNA-RTE", "LTR/Ngaro", "SINE/tRNA-Deu-L2", "LTR/DIRS")
 
-
+## Edit 1 
 ### GEcomment on grouping the retrotransposons in trich spiralis. From Copilot, everything starting with LTR, LINE, SINE, PLE.
 
 grace_retro_sp <- te_sp |> 
@@ -138,8 +144,8 @@ nrow(comp_retro_s9)
 ### Count the observations selected using the str_detect() method. Comparing these counts helps establish whether both approaches retain the same number of observations.
 nrow(grace_retro_s9)
 
+## Edit 1 ends 
 
-########
 new_sp <- df_trich_sp |> 
   filter(matching_class %notin% non_te_sp) |>
   mutate(class_te = if_else(matching_class %in% retro_sp, "retrotrans", "DNAtrans")) 
@@ -156,7 +162,8 @@ new_s9 |>
   geom_point() +
   geom_smooth()
 
-## Classifying retrotransposons and DNA transposons using a reusable function ----
+### Edit 2
+### Classifying retrotransposons and DNA transposons using a reusable function ----
 # A reusable function is introduced to apply the same TE classification procedure across multiple datasets. This reduces repetitive code, promotes consistency, and makes the classification process easier to maintain when additional datasets are introduced.
 
 classify_te <- function(data) {
@@ -165,6 +172,8 @@ classify_te <- function(data) {
 grace_new_sp <- classify_te(te_sp)
 
 grace_new_s9 <- classify_te(te_s9)
+
+## Edit 2 ends
 
 # do TE families evolve differently
 # compare  perc del vs perc div of DNA trans between species
@@ -318,6 +327,23 @@ te_composition |>
        y = "Proportion of TE Annotations",
        colour = "Dataset")
 
+### Edit 3
+## Visualizing TE family distribution across datasets using horizontal bar char.
+
+te_composition |> 
+  ggplot(aes(x = reorder(matching_class, proportion), 
+             y = proportion,
+             fill = dataset)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  labs(title = "TE FAmily Composition Across Datasets",
+       x = "TE Family/Class",
+       y = "Proportion of TE Annotations",
+       fill = "Dataset") +
+  theme_minimal()
+
+## Edit 3 ends 
+
 # Ranking TE families by abundance
 
 te_composition |>
@@ -342,18 +368,3 @@ te_composition |>
   summarise(top_five_percentage = sum(percentage))
 # Gives us the combined percentage of top five, %91.7
 
-
-### GEadditions
-## Visualizing TE family distribution across datasets
-
-te_composition |> 
-  ggplot(aes(x = reorder(matching_class, proportion), 
-         y = proportion,
-         fill = dataset)) +
-  geom_col(position = "dodge") +
-  coord_flip() +
-  labs(title = "TE FAmily Composition Across Datasets",
-       x = "TE Family/Class",
-       y = "Proportion of TE Annotations",
-       fill = "Dataset") +
-  theme_minimal()
